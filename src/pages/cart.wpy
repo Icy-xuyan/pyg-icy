@@ -1,0 +1,16 @@
+<style lang="less">
+</style>
+<template lang="wxml">
+  <view class="container">cate</view>
+  <image></image>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Cate extends wepy.page {
+  config = {
+    navigationBarTitleText: '购物车'
+  };
+}
+</script>

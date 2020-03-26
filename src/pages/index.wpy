@@ -1,0 +1,195 @@
+<style lang="less">
+.slide-image {
+  width: 750rpx;
+  height: 340rpx;
+}
+
+.nav {
+  display: flex;
+  background-color: #fff;
+
+  &-item {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    padding: 24rpx 0 29rpx 0;
+  }
+
+  &-img {
+    width: 128rpx;
+    height: 128rpx;
+  }
+}
+
+.floor {
+  &-head {
+    margin-top: 30rpx;
+    image {
+      width: 750rpx;
+      height: 59rpx;
+    }
+  }
+
+  &-body {
+    display: flex;
+    padding: 20rpx 16rpx;
+    background-color: #fff;
+
+    &-left,
+    &-left-img {
+      width: 232rpx;
+      height: 386rpx;
+    }
+
+    &-right {
+      display: flex;
+      flex-wrap: wrap;
+      height: 386rpx;
+      overflow: hidden;
+
+      &-img {
+        width: 233rpx;
+        height: 188rpx;
+        margin: 0 0 10rpx 10rpx;
+      }
+    }
+  }
+}
+
+.to-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  right: 30rpx;
+  bottom: 90rpx;
+  width: 90rpx;
+  height: 90rpx;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+
+  &-img {
+    width: 24rpx;
+    height: 14rpx;
+  }
+  &-text {
+    margin-top: 5rpx;
+    color: #666;
+  }
+}
+
+.end-tips {
+  display: flex;
+  justify-content: center;
+  height: 200rpx;
+  padding-top: 30rpx;
+  box-sizing: border-box;
+  color: #999;
+}
+</style>
+<template lang="wxml" minapp="wepy">
+  <!-- 顶部轮播图 -->
+  <swiper
+    indicator-dots="{{indicatorDots}}"
+    indicator-active-color="{{indicatorActiveColor}}"
+    autoplay="{{autoplay}}"
+    interval="{{interval}}"
+    duration="{{duration}}"
+    circular="{{circular}}">
+    <block wx:for="{{imgUrls}}" wx:key="*this">
+      <swiper-item>
+        <image src="{{item}}" class="slide-image" alt="" title="" width="355" height="150"/>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <!-- 导航 -->
+  <view class="nav">
+    <navigator class="nav-item" hover-class="none" url="">
+      <image src="/assets/upload/icon_index_nav_1@2x.png" class="nav-img" />
+    </navigator>
+    <navigator class="nav-item" hover-class="none" url="">
+      <image src="/assets/upload/icon_index_nav_2@2x.png" class="nav-img" />
+    </navigator>
+    <!-- <navigator class="nav-item">
+      <image src="/assets/upload/icon_index_nav_3@2x.png" class="nav-img" />
+    </navigator> -->
+    <navigator class="nav-item" hover-class="none" url="">
+      <image src="/assets/upload/icon_index_nav_4@2x.png" class="nav-img" />
+    </navigator>
+    <navigator class="nav-item" hover-class="none" url="">
+      <image src="/assets/upload/icon_index_nav_5@2x.png" class="nav-img" />
+    </navigator>
+  </view>
+
+  <!-- 楼层 -->
+  <view class="floor">
+    <view class="floor-head">
+      <image src="/assets/upload/pic_floor01_title.png" />
+    </view>
+    <view class="floor-body">
+      <view class="floor-body-left">
+        <image class="floor-body-left-img" src="/assets/upload/pic_floor01_1@2x.png"></image>
+      </view>
+      <view class="floor-body-right">
+        <navigator url="">
+          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_2@2x.png" />
+        </navigator>
+        <navigator url="">
+          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_3@2x.png" />
+        </navigator>
+        <navigator url="">
+          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_4@2x.png" />
+        </navigator>
+        <navigator url="">
+          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_5@2x.png" />
+        </navigator>
+      </view>
+    </view>
+  </view>
+
+  <!-- 返回顶部 -->
+  <view class="to-top">
+    <image src="/assets/images/arrow_top@2x.png" class="to-top-img"></image>
+    <text class="to-top-text">顶部</text>
+  </view>
+
+  <!-- 底线 -->
+  <view class="end-tips">
+    <view class="iconfont icon-xiao"></view>
+    <view class="end-tips-text">我是有底线的</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+//
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: '品优购',
+    navigationBarBackgroundColor: '#ff2d4a',
+    navigationBarTextStyle: 'white'
+  };
+
+  data = {
+    imgUrls: [
+      '/assets/upload/banner1.png',
+      '/assets/upload/banner2.png',
+      '/assets/upload/banner3.png',
+      '/assets/upload/banner4.png',
+      '/assets/upload/banner5.png'
+    ],
+    indicatorDots: true,
+    indicatorActiveColor: '#fff',
+    autoplay: true,
+    interval: 5000,
+    duration: 1000,
+    circular: true
+  };
+
+  onLoad() {
+    console.log('onLoad');
+  }
+}
+</script>
