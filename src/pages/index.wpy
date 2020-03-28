@@ -170,30 +170,34 @@ export default class Index extends wepy.page {
 
   onLoad() {
     // 获取轮播图数据
-    wepy.request({
-      url: 'http://localhost:8888/api/public/v1/home/swiperdata',
-      success: res => {
+    wepy
+      .request({
+        url: 'http://localhost:8888/api/public/v1/home/swiperdata'
+      })
+      .then(res => {
         this.imgUrls = res.data.data;
         this.$apply();
-      }
-    });
+      });
+
     // 获取分类选项数据
-    wepy.request({
-      url: 'http://localhost:8888/api/public/v1/home/catitems',
-      success: res => {
+    wepy
+      .request({
+        url: 'http://localhost:8888/api/public/v1/home/catitems'
+      })
+      .then(res => {
         this.cateList = res.data.data;
         this.$apply();
-      }
-    });
+      });
+
     // 获取商品楼层数据
-    wepy.request({
-      url: 'http://localhost:8888/api/public/v1/home/floordata',
-      success: res => {
-        console.log(res);
+    wepy
+      .request({
+        url: 'http://localhost:8888/api/public/v1/home/floordata'
+      })
+      .then(res => {
         this.goodList = res.data.data;
         this.$apply();
-      }
-    });
+      });
   }
 }
 </script>
