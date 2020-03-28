@@ -97,56 +97,37 @@
     interval="{{interval}}"
     duration="{{duration}}"
     circular="{{circular}}">
-    <block wx:for="{{imgUrls}}" wx:key="*this">
+    <block wx:for="{{imgUrls}}" wx:key="image_src">
       <swiper-item>
-        <image src="{{item}}" class="slide-image" alt="" title="" width="355" height="150"/>
+        <image src="{{item.image_src}}" class="slide-image" alt="" title="" width="355" height="150"/>
       </swiper-item>
     </block>
   </swiper>
 
   <!-- 导航 -->
   <view class="nav">
-    <navigator class="nav-item" hover-class="none" url="">
-      <image src="/assets/upload/icon_index_nav_1@2x.png" class="nav-img" />
-    </navigator>
-    <navigator class="nav-item" hover-class="none" url="">
-      <image src="/assets/upload/icon_index_nav_2@2x.png" class="nav-img" />
-    </navigator>
-    <!-- <navigator class="nav-item">
-      <image src="/assets/upload/icon_index_nav_3@2x.png" class="nav-img" />
-    </navigator> -->
-    <navigator class="nav-item" hover-class="none" url="">
-      <image src="/assets/upload/icon_index_nav_4@2x.png" class="nav-img" />
-    </navigator>
-    <navigator class="nav-item" hover-class="none" url="">
-      <image src="/assets/upload/icon_index_nav_5@2x.png" class="nav-img" />
+    <navigator wx:for="{{cateList}}" wx:key="image_src" class="nav-item" hover-class="none" url="">
+      <image src="{{item.image_src}}" class="nav-img" />
     </navigator>
   </view>
 
   <!-- 楼层 -->
   <view class="floor">
-    <view class="floor-head">
-      <image src="/assets/upload/pic_floor01_title.png" />
-    </view>
-    <view class="floor-body">
-      <view class="floor-body-left">
-        <image class="floor-body-left-img" src="/assets/upload/pic_floor01_1@2x.png"></image>
+    <block wx:for="{{goodList}}" wx:key="index">
+      <view class="floor-head">
+        <image src="{{item.floor_title.image_src}}" />
       </view>
-      <view class="floor-body-right">
-        <navigator url="">
-          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_2@2x.png" />
-        </navigator>
-        <navigator url="">
-          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_3@2x.png" />
-        </navigator>
-        <navigator url="">
-          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_4@2x.png" />
-        </navigator>
-        <navigator url="">
-          <image class="floor-body-right-img" src="/assets/upload/pic_floor01_5@2x.png" />
-        </navigator>
+      <view class="floor-body">
+        <view class="floor-body-left">
+          <image class="floor-body-left-img" src="{{item.product_list[0].image_src}}"></image>
+        </view>
+        <view class="floor-body-right">
+          <navigator url="" wx:for="{{item.product_list}}" wx:for-item="rightItem" wx:key="index" wx:if="{{index > 0}}">
+            <image class="floor-body-right-img" src="{{rightItem.image_src}}" style="width:{{rightItem.image_width}}rpx" />
+          </navigator>
+        </view>
       </view>
-    </view>
+    </block>
   </view>
 
   <!-- 返回顶部 -->
@@ -173,23 +154,46 @@ export default class Index extends wepy.page {
   };
 
   data = {
-    imgUrls: [
-      '/assets/upload/banner1.png',
-      '/assets/upload/banner2.png',
-      '/assets/upload/banner3.png',
-      '/assets/upload/banner4.png',
-      '/assets/upload/banner5.png'
-    ],
+    // 轮播图数据
+    imgUrls: [],
     indicatorDots: true,
     indicatorActiveColor: '#fff',
     autoplay: true,
     interval: 5000,
     duration: 1000,
-    circular: true
+    circular: true,
+    // 分类导航数据
+    cateList: [],
+    // 商品数据
+    goodList: []
   };
 
   onLoad() {
-    console.log('onLoad');
+    // 获取轮播图数据
+    wepy.request({
+      url: 'http://localhost:8888/api/public/v1/home/swiperdata',
+      success: res => {
+        this.imgUrls = res.data.data;
+        this.$apply();
+      }
+    });
+    // 获取分类选项数据
+    wepy.request({
+      url: 'http://localhost:8888/api/public/v1/home/catitems',
+      success: res => {
+        this.cateList = res.data.data;
+        this.$apply();
+      }
+    });
+    // 获取商品楼层数据
+    wepy.request({
+      url: 'http://localhost:8888/api/public/v1/home/floordata',
+      success: res => {
+        console.log(res);
+        this.goodList = res.data.data;
+        this.$apply();
+      }
+    });
   }
 }
 </script>
