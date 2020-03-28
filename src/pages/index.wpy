@@ -168,36 +168,25 @@ export default class Index extends wepy.page {
     goodList: []
   };
 
-  onLoad() {
+  async onLoad() {
     // 获取轮播图数据
-    wepy
-      .request({
-        url: 'http://localhost:8888/api/public/v1/home/swiperdata'
-      })
-      .then(res => {
-        this.imgUrls = res.data.data;
-        this.$apply();
-      });
+    const swiperRes = await wepy.request({
+      url: 'http://localhost:8888/api/public/v1/home/swiperdata'
+    });
+    this.imgUrls = swiperRes.data.data;
 
     // 获取分类选项数据
-    wepy
-      .request({
-        url: 'http://localhost:8888/api/public/v1/home/catitems'
-      })
-      .then(res => {
-        this.cateList = res.data.data;
-        this.$apply();
-      });
+    const cateRes = await wepy.request({
+      url: 'http://localhost:8888/api/public/v1/home/catitems'
+    });
+    this.cateList = cateRes.data.data;
 
     // 获取商品楼层数据
-    wepy
-      .request({
-        url: 'http://localhost:8888/api/public/v1/home/floordata'
-      })
-      .then(res => {
-        this.goodList = res.data.data;
-        this.$apply();
-      });
+    const goodRes = await wepy.request({
+      url: 'http://localhost:8888/api/public/v1/home/floordata'
+    });
+    this.goodList = goodRes.data.data;
+    this.$apply();
   }
 }
 </script>
