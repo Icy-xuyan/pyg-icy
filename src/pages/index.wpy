@@ -131,7 +131,7 @@
   </view>
 
   <!-- 返回顶部 -->
-  <view class="to-top">
+  <view class="to-top" hidden="{{isHiddenGoTopBtn}}" @tap="goTop">
     <image src="/assets/images/arrow_top@2x.png" class="to-top-img"></image>
     <text class="to-top-text">顶部</text>
   </view>
@@ -165,7 +165,17 @@ export default class Index extends wepy.page {
     // 分类导航数据
     cateList: [],
     // 商品数据
-    goodList: []
+    goodList: [],
+    // 控制回到顶部的按钮是否隐藏
+    isHiddenGoTopBtn: true
+  };
+
+  methods = {
+    goTop() {
+      wepy.pageScrollTo({
+        scrollTop: 0
+      });
+    }
   };
 
   async onLoad() {
@@ -186,6 +196,16 @@ export default class Index extends wepy.page {
       url: 'http://localhost:8888/api/public/v1/home/floordata'
     });
     this.goodList = goodRes.data.data;
+    // 设置异步更改数据生效
+    this.$apply();
+  }
+
+  onPageScroll(options) {
+    if (options.scrollTop > 150) {
+      this.isHiddenGoTopBtn = false;
+    } else {
+      this.isHiddenGoTopBtn = true;
+    }
     this.$apply();
   }
 }
