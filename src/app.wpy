@@ -15,7 +15,14 @@ export default class extends wepy.app {
   }
   // 全局配置
   config = {
-    pages: ['pages/index', 'pages/category', 'pages/cart', 'pages/profile'],
+    pages: [
+      'pages/index',
+      'pages/category',
+      'pages/cart',
+      'pages/profile',
+      'pages/goods_detail',
+      'pages/goods_list'
+    ],
     window: {
       navigationBarBackgroundColor: '#ff2d4a',
       navigationBarTitleText: '品优购',

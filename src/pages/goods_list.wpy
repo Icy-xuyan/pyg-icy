@@ -1,0 +1,16 @@
+<style lang="less">
+</style>
+<template lang="wxml">
+  <view class="container">商品列表</view>
+  <image></image>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class GoodsList extends wepy.page {
+  config = {
+    navigationBarTitleText: '商品列表'
+  };
+}
+</script>

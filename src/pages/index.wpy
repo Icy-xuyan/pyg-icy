@@ -99,14 +99,16 @@
     circular="{{circular}}">
     <block wx:for="{{imgUrls}}" wx:key="image_src">
       <swiper-item>
-        <image src="{{item.image_src}}" class="slide-image" alt="" title="" width="355" height="150"/>
+        <navigator url="{{item.navigator_url}}">
+          <image src="{{item.image_src}}" class="slide-image" alt="" title="" width="355" height="150"/>
+        </navigator>
       </swiper-item>
     </block>
   </swiper>
 
   <!-- 导航 -->
   <view class="nav">
-    <navigator wx:for="{{cateList}}" wx:key="image_src" class="nav-item" hover-class="none" url="">
+    <navigator wx:for="{{cateList}}" wx:key="image_src" class="nav-item" hover-class="none" url="{{item.navigator_url}}" open-type="{{item.open_type}}">
       <image src="{{item.image_src}}" class="nav-img" />
     </navigator>
   </view>
@@ -119,10 +121,12 @@
       </view>
       <view class="floor-body">
         <view class="floor-body-left">
-          <image class="floor-body-left-img" src="{{item.product_list[0].image_src}}"></image>
+          <navigator url="{{item.product_list[0].navigator_url}}">
+            <image class="floor-body-left-img" src="{{item.product_list[0].image_src}}"></image>
+          </navigator>
         </view>
         <view class="floor-body-right">
-          <navigator url="" wx:for="{{item.product_list}}" wx:for-item="rightItem" wx:key="index" wx:if="{{index > 0}}">
+          <navigator open-type={{rightItem.open_type}} url="{{rightItem.navigator_url}}" wx:for="{{item.product_list}}" wx:for-item="rightItem" wx:key="index" wx:if="{{index > 0}}">
             <image class="floor-body-right-img" src="{{rightItem.image_src}}" style="width:{{rightItem.image_width}}rpx" />
           </navigator>
         </view>
