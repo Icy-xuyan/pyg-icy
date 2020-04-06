@@ -279,7 +279,7 @@
     <!-- <Address> -->
     <view class="part-item">
       <text class="note">送至</text>
-      <text class="description">上海市浦东新区航头镇航都路18号黑马程序员</text>
+      <text class="description" @tap="changeAddress">{{address}}</text>
       <view class="iconfont icon-jiantouyou"></view>
     </view>
     <!-- </Address> -->
@@ -346,16 +346,35 @@ export default class Index extends wepy.page {
   data = {
     detail: null,
     // 切换控制 取值 desc 、 attr
-    type: 'desc'
+    type: 'desc',
+    address: '请选择收获地址'
   };
 
   methods = {
     switchTab(type) {
       this.type = type;
+    },
+    async changeAddress() {
+      let res = await wepy.chooseAddress();
+      console.log(res);
+      this.setAddress(res);
+      // 将收获地址存储到本地缓存中
+      wepy.setStorageSync('address', res);
     }
   };
 
+  // 同步地址数据
+  setAddress(address) {
+    const { provinceName, cityName, countyName, detailInfo } = address;
+    this.address = `${provinceName}${cityName}${countyName}${detailInfo}`;
+  }
+
   async onLoad(options) {
+    // 获取缓存中地址
+    let address = wepy.getStorageSync('address');
+    if (address) {
+      this.setAddress(address);
+    }
     const res = await wepy.request({
       url: 'https://api-hmugo-web.itheima.net/api/public/v1/goods/detail',
       data: {
