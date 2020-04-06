@@ -279,7 +279,7 @@
     <!-- <Address> -->
     <view class="part-item">
       <text class="note">送至</text>
-      <text class="description" @tap="changeAddress">{{address}}</text>
+      <text class="description" @tap="chooseAddress">{{address}}</text>
       <view class="iconfont icon-jiantouyou"></view>
     </view>
     <!-- </Address> -->
@@ -354,12 +354,57 @@ export default class Index extends wepy.page {
     switchTab(type) {
       this.type = type;
     },
-    async changeAddress() {
-      let res = await wepy.chooseAddress();
-      console.log(res);
-      this.setAddress(res);
-      // 将收获地址存储到本地缓存中
-      wepy.setStorageSync('address', res);
+    // async changeAddress() {
+    //   let res = await wepy.chooseAddress();
+    //   console.log(res);
+    //   this.setAddress(res);
+    //   this.$apply();
+    //   // 将收获地址存储到本地缓存中
+    //   wepy.setStorageSync('address', res);
+    // }
+
+    // 选择地址方法
+    chooseAddress() {
+      // wx.chooseAddress({
+      //   success(res) {}
+      // });
+      /**
+       * 判断是否授权。分为3种方式
+       * 1. 第一次打开，之前没有授权过，直接弹出授权请求框
+       * 2. 之前授权过，直接进入地址选择页面
+       * 3. 之前打开过但是拒绝授权了，需要弹出重新授权确认页面
+       */
+      wx.getSetting({
+        success: res => {
+          const scopeAddress = res.authSetting['scope.address'];
+          if (scopeAddress === undefined || scopeAddress) {
+            console.log('第一次授权 || 之前授权通过');
+            this.getAddress();
+          } else if (scopeAddress === false) {
+            console.log('之前拒绝授权');
+            // 弹层重新授权
+            wx.showModal({
+              title: '温馨提示',
+              content: '您已经拒绝了授权，想要使用该功能请点击确定去开启授权',
+              success: res => {
+                if (res.confirm) {
+                  console.log('用户点击确定');
+                  // 打开设置页面
+                  wx.openSetting({
+                    success: res => {
+                      console.log(res.authSetting);
+                      // 如果设置了授权
+                      if (res.authSetting['scope.address']) {
+                        this.getAddress();
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          }
+        }
+      });
     }
   };
 
@@ -367,6 +412,17 @@ export default class Index extends wepy.page {
   setAddress(address) {
     const { provinceName, cityName, countyName, detailInfo } = address;
     this.address = `${provinceName}${cityName}${countyName}${detailInfo}`;
+  }
+  // 获取地址的处理
+  getAddress() {
+    wx.chooseAddress({
+      success: res => {
+        this.setAddress(res);
+        this.$apply();
+        // 将收获地址存储到本地缓存中
+        wepy.setStorageSync('address', res);
+      }
+    });
   }
 
   async onLoad(options) {
