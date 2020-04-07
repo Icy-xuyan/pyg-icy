@@ -319,12 +319,12 @@
       <text class="item-note">联系客服</text>
     </view>
     <!-- 10.0.1 事件绑定，通过事件方式，实现购物车 tabBar 跳转 -->
-    <view class="item">
+    <navigator class="item" open-type="switchTab" url="/pages/cart">
       <view class="iconfont icon-gouwuche"></view>
       <text class="item-note">购物车</text>
-    </view>
+    </navigator>
     <view class="btn-group">
-      <view class="btn yellow-button">加入购物车</view>
+      <view class="btn yellow-button" @tap="addGoodsToCart({{detail.goods_id}})">加入购物车</view>
       <view class="btn red-button">立即购买</view>
     </view>
   </view>
@@ -363,7 +363,7 @@ export default class Index extends wepy.page {
     //   wepy.setStorageSync('address', res);
     // }
 
-    // 选择地址方法
+    // 选择地址
     chooseAddress() {
       // wx.chooseAddress({
       //   success(res) {}
@@ -404,6 +404,44 @@ export default class Index extends wepy.page {
             });
           }
         }
+      });
+    },
+
+    // 加入购物车
+    addGoodsToCart(goods_id) {
+      // 思路：先将数据缓存，再渲染到购物车列表页
+      // 获取数据缓存中的购物车数据
+      let cartGoods = wepy.getStorageSync('cartGoods') || [];
+      // 根据id查找缓存中是否已经有该商品
+      let curGood = cartGoods.find(item => item.goods_id === goods_id);
+      // console.log(curGood);
+      const {
+        goods_name,
+        goods_price,
+        goods_number,
+        goods_small_logo
+      } = this.detail;
+      if (curGood) {
+        // 如果有 直接数量+1
+        curGood.goods_number++;
+      } else {
+        // 如果没有 添加数据到缓存数组中
+        cartGoods.push({
+          goods_id,
+          goods_name,
+          goods_price,
+          goods_number: 1, // 加入购物车的商品数量 默认为1
+          goods_small_logo,
+          isChecked: true
+        });
+      }
+      // 更新数据缓存
+      wepy.setStorageSync('cartGoods', cartGoods);
+      // 假如购物车成功提示
+      wx.showToast({
+        title: '添加成功',
+        duration: 800,
+        mask: true
       });
     }
   };
